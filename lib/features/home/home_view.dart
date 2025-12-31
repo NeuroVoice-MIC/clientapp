@@ -1,4 +1,3 @@
-import 'package:clientapp/core/constants/colors.dart';
 import 'package:clientapp/core/constants/text_styles.dart';
 import 'package:clientapp/shared/widgets/daily_tip_card.dart';
 import 'package:clientapp/shared/widgets/latest_checkup_card.dart';
@@ -15,44 +14,34 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: AppColors.primary,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+    return SafeArea(
+      child: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          Text(
+            "Good morning,\n${viewModel.userName}.",
+            style: AppTextStyles.title,
+          ),
+          const SizedBox(height: 6),
+          Text("You're doing great today!", style: AppTextStyles.subtitle),
+          const SizedBox(height: 20),
+
+          StreakCard(viewModel: viewModel),
+          const SizedBox(height: 20),
+
+          VoiceTestCard(
+            onTap: () => viewModel.startVoiceTest(context),
+          ),
+          const SizedBox(height: 20),
+
+          const Text("Overview", style: AppTextStyles.cardTitle),
+          const SizedBox(height: 12),
+
+          LatestCheckupCard(onTap: viewModel.openDetails),
+          const SizedBox(height: 16),
+
+          const DailyTipCard(),
         ],
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            Text(
-              "Good morning,\n${viewModel.userName}.",
-              style: AppTextStyles.title,
-            ),
-            const SizedBox(height: 6),
-            Text("You're doing great today!", style: AppTextStyles.subtitle),
-            const SizedBox(height: 20),
-
-            StreakCard(viewModel: viewModel),
-            const SizedBox(height: 20),
-
-            VoiceTestCard(onTap: () => viewModel.startVoiceTest(context),),
-            const SizedBox(height: 20),
-
-            const Text("Overview", style: AppTextStyles.cardTitle),
-            const SizedBox(height: 12),
-
-            LatestCheckupCard(onTap: viewModel.openDetails),
-            const SizedBox(height: 16),
-
-            const DailyTipCard(),
-          ],
-        ),
       ),
     );
   }

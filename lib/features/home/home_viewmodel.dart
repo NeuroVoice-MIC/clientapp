@@ -6,7 +6,6 @@ class HomeViewModel {
   int streakPercent = 75;
 
   void startVoiceTest(BuildContext context) {
-    debugPrint("Starting voice test...");
     Navigator.of(context, rootNavigator: true).pushNamed('/voice');
   }
 
