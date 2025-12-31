@@ -1,4 +1,5 @@
 import 'package:clientapp/features/history/history_view.dart';
+import 'package:clientapp/features/profile/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:clientapp/core/constants/colors.dart';
 import 'package:clientapp/features/home/home_view.dart';
@@ -16,7 +17,7 @@ class _MainShellViewState extends State<MainShellView> {
   final List<Widget> _pages = [
     HomeView(),
     const HistoryView(),
-    const Placeholder(), // Profile later
+    const ProfileView(),
   ];
 
   @override
