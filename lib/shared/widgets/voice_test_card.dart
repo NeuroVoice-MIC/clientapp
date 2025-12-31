@@ -7,8 +7,9 @@ class VoiceTestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed('/voice'),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
       child: Container(
         height: 140,
         decoration: BoxDecoration(
@@ -20,14 +21,10 @@ class VoiceTestCard extends StatelessWidget {
           children: const [
             Icon(Icons.mic, color: Colors.white, size: 40),
             SizedBox(height: 10),
-            Text(
-              "Start Voice Test",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            Text(
-              "Takes less than 30 seconds",
-              style: TextStyle(color: Colors.white70),
-            ),
+            Text("Start Voice Test",
+                style: TextStyle(color: Colors.white, fontSize: 20)),
+            Text("Takes less than 30 seconds",
+                style: TextStyle(color: Colors.white70)),
           ],
         ),
       ),

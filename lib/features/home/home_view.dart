@@ -41,7 +41,7 @@ class HomeView extends StatelessWidget {
             StreakCard(viewModel: viewModel),
             const SizedBox(height: 20),
 
-            VoiceTestCard(onTap: viewModel.startVoiceTest),
+            VoiceTestCard(onTap: () => viewModel.startVoiceTest(context),),
             const SizedBox(height: 20),
 
             const Text("Overview", style: AppTextStyles.cardTitle),

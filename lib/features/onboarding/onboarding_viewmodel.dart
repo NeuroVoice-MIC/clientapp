@@ -4,7 +4,7 @@ class OnboardingViewModel {
   void getStarted(BuildContext context) {
     // Later: save onboarding complete flag, permissions, etc.
     
-    Navigator.pushReplacementNamed(
+    Navigator.pushNamed(
       context,
       '/home',
     );

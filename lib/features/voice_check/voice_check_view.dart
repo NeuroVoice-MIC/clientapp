@@ -24,67 +24,89 @@ class _VoiceCheckBody extends StatefulWidget {
 }
 
 class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
+  bool _started = false;
+
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<VoiceCheckViewModel>().startRecording();
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_started) {
+      _started = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<VoiceCheckViewModel>().startRecording();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () async {
-            await context.read<VoiceCheckViewModel>().stopRecording();
-            if (mounted) Navigator.pop(context);
-          },
+    return WillPopScope(
+      onWillPop: () async {
+        await context.read<VoiceCheckViewModel>().stopRecording();
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () async {
+              await context.read<VoiceCheckViewModel>().stopRecording();
+
+              // ✅ IMPORTANT: pop from ROOT navigator
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+          title: const Text(
+            'Voice Check',
+            style: AppTextStyles.title,
+          ),
         ),
-        title: const Text('Voice Check', style: TextStyle(color: Colors.black)),
-        centerTitle: true,
-      ),
-      body: Consumer<VoiceCheckViewModel>(
-        builder: (_, vm, __) {
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                _ProgressIndicator(),
-                const SizedBox(height: 24),
-                _InstructionCard(),
-                const SizedBox(height: 40),
-                _WaveBars(),
-                const SizedBox(height: 24),
-                _StatusChip(),
-                const SizedBox(height: 32),
-                Text(vm.formattedTime, style: AppTextStyles.timer),
-                const SizedBox(height: 8),
-                const Text(
-                  "RECORDING TIME",
-                  style: TextStyle(
-                    letterSpacing: 2,
-                    fontSize: 12,
-                    color: AppColors.textSecondary,
-                  ),
+        body: SafeArea(
+          child: Consumer<VoiceCheckViewModel>(
+            builder: (_, vm, __) {
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    const _ProgressIndicator(),
+                    const SizedBox(height: 24),
+                    const _InstructionCard(),
+                    const SizedBox(height: 40),
+                    const _WaveBars(),
+                    const SizedBox(height: 24),
+                    const _StatusChip(),
+                    const SizedBox(height: 32),
+                    Text(vm.formattedTime, style: AppTextStyles.timer),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "RECORDING TIME",
+                      style: TextStyle(
+                        letterSpacing: 2,
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const Spacer(),
+                    _StopButton(vm),
+                  ],
                 ),
-                const Spacer(),
-                _StopButton(vm),
-              ],
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 }
 
+/* ===================== UI WIDGETS ===================== */
+
 class _ProgressIndicator extends StatelessWidget {
+  const _ProgressIndicator();
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -108,6 +130,8 @@ class _ProgressIndicator extends StatelessWidget {
 }
 
 class _InstructionCard extends StatelessWidget {
+  const _InstructionCard();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -140,6 +164,8 @@ class _InstructionCard extends StatelessWidget {
 }
 
 class _WaveBars extends StatelessWidget {
+  const _WaveBars();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -165,6 +191,8 @@ class _WaveBars extends StatelessWidget {
 }
 
 class _StatusChip extends StatelessWidget {
+  const _StatusChip();
+
   @override
   Widget build(BuildContext context) {
     return Container(
