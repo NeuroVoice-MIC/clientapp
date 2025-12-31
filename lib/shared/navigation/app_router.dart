@@ -11,7 +11,7 @@ class AppRouter {
       case '/':
         return MaterialPageRoute(builder: (_) => const OnboardingView());
       case '/home':
-        return MaterialPageRoute(builder: (_) => const HomeView());
+        return MaterialPageRoute(builder: (_) => HomeView());
       case '/voice':
         return MaterialPageRoute(builder: (_) => const VoiceCheckView());
       case '/processing':

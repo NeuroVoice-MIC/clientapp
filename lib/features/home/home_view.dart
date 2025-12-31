@@ -1,27 +1,56 @@
+import 'package:clientapp/core/constants/colors.dart';
+import 'package:clientapp/core/constants/text_styles.dart';
+import 'package:clientapp/shared/widgets/daily_tip_card.dart';
+import 'package:clientapp/shared/widgets/latest_checkup_card.dart';
+import 'package:clientapp/shared/widgets/streak_card.dart';
+import 'package:clientapp/shared/widgets/voice_test_card.dart';
 import 'package:flutter/material.dart';
 import 'home_viewmodel.dart';
 
+
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  HomeView({super.key});
+
+  final HomeViewModel viewModel = HomeViewModel();
 
   @override
   Widget build(BuildContext context) {
-    final vm = HomeViewModel();
-
     return Scaffold(
-      appBar: AppBar(title: const Text("NeuroVoice")),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: AppColors.background,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        selectedItemColor: AppColors.primary,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+      ),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(20),
           children: [
-            const Text("Good morning 👋", style: TextStyle(fontSize: 20)),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.mic),
-              label: const Text("Start Voice Test"),
-              onPressed: () => vm.startVoiceTest(context),
+            Text(
+              "Good morning,\n${viewModel.userName}.",
+              style: AppTextStyles.title,
             ),
+            const SizedBox(height: 6),
+            Text("You're doing great today!", style: AppTextStyles.subtitle),
+            const SizedBox(height: 20),
+
+            StreakCard(viewModel: viewModel),
+            const SizedBox(height: 20),
+
+            VoiceTestCard(onTap: viewModel.startVoiceTest),
+            const SizedBox(height: 20),
+
+            const Text("Overview", style: AppTextStyles.cardTitle),
+            const SizedBox(height: 12),
+
+            LatestCheckupCard(onTap: viewModel.openDetails),
+            const SizedBox(height: 16),
+
+            const DailyTipCard(),
           ],
         ),
       ),

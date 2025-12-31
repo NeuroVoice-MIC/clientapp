@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class OnboardingViewModel {
-  void start(BuildContext context) {
-    Navigator.pushReplacementNamed(context, '/home');
+  void getStarted(BuildContext context) {
+    // Later: save onboarding complete flag, permissions, etc.
+    
+    Navigator.pushReplacementNamed(
+      context,
+      '/home',
+    );
   }
 }

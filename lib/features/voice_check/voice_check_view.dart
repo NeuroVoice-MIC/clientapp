@@ -1,26 +1,214 @@
+import 'package:clientapp/core/constants/colors.dart';
+import 'package:clientapp/core/constants/text_styles.dart';
+import 'package:clientapp/features/voice_check/voice_check_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'voice_check_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class VoiceCheckView extends StatelessWidget {
   const VoiceCheckView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final vm = VoiceCheckViewModel();
+    return ChangeNotifierProvider(
+      create: (_) => VoiceCheckViewModel(),
+      child: const _VoiceCheckBody(),
+    );
+  }
+}
 
+class _VoiceCheckBody extends StatefulWidget {
+  const _VoiceCheckBody();
+
+  @override
+  State<_VoiceCheckBody> createState() => _VoiceCheckBodyState();
+}
+
+class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<VoiceCheckViewModel>().startRecording();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Voice Check")),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("Say \"aaaa\" for 10 seconds",
-              style: TextStyle(fontSize: 18)),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: () => vm.record(context),
-            child: const Text("Start Recording"),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () async {
+            await context.read<VoiceCheckViewModel>().stopRecording();
+            if (mounted) Navigator.pop(context);
+          },
+        ),
+        title: const Text('Voice Check', style: TextStyle(color: Colors.black)),
+        centerTitle: true,
+      ),
+      body: Consumer<VoiceCheckViewModel>(
+        builder: (_, vm, __) {
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                _ProgressIndicator(),
+                const SizedBox(height: 24),
+                _InstructionCard(),
+                const SizedBox(height: 40),
+                _WaveBars(),
+                const SizedBox(height: 24),
+                _StatusChip(),
+                const SizedBox(height: 32),
+                Text(vm.formattedTime, style: AppTextStyles.timer),
+                const SizedBox(height: 8),
+                const Text(
+                  "RECORDING TIME",
+                  style: TextStyle(
+                    letterSpacing: 2,
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                const Spacer(),
+                _StopButton(vm),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ProgressIndicator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        3,
+        (index) => Container(
+          margin: const EdgeInsets.symmetric(horizontal: 6),
+          height: 6,
+          width: index == 0 ? 32 : 8,
+          decoration: BoxDecoration(
+            color: index == 0
+                ? AppColors.primaryBlue
+                : AppColors.progressInactive,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _InstructionCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 20,
+            color: Colors.black.withOpacity(0.05),
           )
         ],
+      ),
+      child: Column(
+        children: const [
+          Text("STEP 1 OF 3", style: AppTextStyles.stepText),
+          SizedBox(height: 10),
+          Text('Say "aaaa"', style: AppTextStyles.title),
+          SizedBox(height: 8),
+          Text(
+            "Keep your voice steady for 10–15 seconds.",
+            textAlign: TextAlign.center,
+            style: AppTextStyles.subtitle,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WaveBars extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 120,
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          7,
+          (index) => Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            width: 10,
+            height: 60 + (index % 2) * 20,
+            decoration: BoxDecoration(
+              color: AppColors.primaryBlue.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(6),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StatusChip extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.successGreen,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          Icon(Icons.check_circle, color: Colors.green),
+          SizedBox(width: 8),
+          Text(
+            "Nice and steady!",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Colors.green,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StopButton extends StatelessWidget {
+  final VoiceCheckViewModel vm;
+  const _StopButton(this.vm);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => vm.stopRecording(),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.dangerRed,
+        minimumSize: const Size.fromHeight(56),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+      ),
+      child: const Text(
+        "Stop Recording",
+        style: TextStyle(fontSize: 18),
       ),
     );
   }

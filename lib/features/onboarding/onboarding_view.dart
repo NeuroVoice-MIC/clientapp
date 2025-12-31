@@ -1,3 +1,6 @@
+import 'package:clientapp/core/constants/assets.dart';
+import 'package:clientapp/core/constants/colors.dart';
+import 'package:clientapp/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'onboarding_viewmodel.dart';
 
@@ -9,27 +12,136 @@ class OnboardingView extends StatelessWidget {
     final vm = OnboardingViewModel();
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Early detection,\njust a word away.",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "This is a screening tool, not a medical diagnosis.",
-              textAlign: TextAlign.center,
-            ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () => vm.start(context),
-              child: const Text("Get Started"),
-            )
-          ],
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+
+              /// Header
+              Row(
+                children: const [
+                  Icon(Icons.graphic_eq, color: AppColors.accentBlue),
+                  SizedBox(width: 8),
+                  Text(
+                    AppStrings.appName,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Spacer(),
+                  Icon(Icons.help_outline, color: Colors.grey),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+
+              /// Main Card
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: AppColors.cardBackground,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.shadow,
+                      blurRadius: 20,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        AppAssets.brainWave,
+                        height: 180,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      AppStrings.onboardingTitle,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              /// Description
+              const Text(
+                AppStrings.onboardingDescription,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  height: 1.4,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              /// Important Notice
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.infoBackground,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Icon(Icons.info, color: AppColors.accentBlue),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppStrings.importantNoticeTitle,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            AppStrings.importantNoticeText,
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Spacer(),
+
+              /// Get Started
+              SizedBox(
+                width: double.infinity,
+                height: 54,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryBlue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  onPressed: () => vm.getStarted(context),
+                  child: const Text("Get Started"),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );

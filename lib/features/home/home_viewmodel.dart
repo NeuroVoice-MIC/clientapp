@@ -1,7 +1,13 @@
-import 'package:flutter/material.dart';
-
 class HomeViewModel {
-  void startVoiceTest(BuildContext context) {
-    Navigator.pushNamed(context, '/voice');
+  String userName = "Arthur";
+  int streakDays = 3;
+  int streakPercent = 75;
+
+  void startVoiceTest() {
+    // later: navigate to voice recording screen
+  }
+
+  void openDetails() {
+    // later: navigate to report
   }
 }
