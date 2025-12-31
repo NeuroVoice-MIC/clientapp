@@ -9,6 +9,13 @@ class VoiceCheckViewModel extends ChangeNotifier {
   int remainingSeconds = 12;
   String? recordedFilePath;
   bool _isRecording = false;
+  bool _shouldNavigateToProcessing = false;
+
+  bool get shouldNavigateToProcessing => _shouldNavigateToProcessing;
+
+  void resetNavigationFlag() {
+    _shouldNavigateToProcessing = false;
+  }
 
   Future<void> startRecording() async {
     if (_isRecording) return;
@@ -39,6 +46,9 @@ class VoiceCheckViewModel extends ChangeNotifier {
     _isRecording = false;
 
     debugPrint('WAV file saved at: $recordedFilePath');
+    
+    // Set flag to trigger navigation
+    _shouldNavigateToProcessing = true;
     notifyListeners();
   }
 

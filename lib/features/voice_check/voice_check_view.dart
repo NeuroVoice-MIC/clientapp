@@ -38,6 +38,17 @@ class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
     }
   }
 
+  void _checkAndNavigate(VoiceCheckViewModel vm) {
+    if (vm.shouldNavigateToProcessing) {
+      vm.resetNavigationFlag();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed('/processing');
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -67,6 +78,7 @@ class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
         body: SafeArea(
           child: Consumer<VoiceCheckViewModel>(
             builder: (_, vm, __) {
+              _checkAndNavigate(vm);
               return Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
