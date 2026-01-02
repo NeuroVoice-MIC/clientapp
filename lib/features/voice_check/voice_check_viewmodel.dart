@@ -83,41 +83,49 @@ class VoiceCheckViewModel extends ChangeNotifier {
   // ===============================
 
   Future<void> _uploadAndAnalyze() async {
-  isUploading = true;
-  processProgress = 0.1;
-  notifyListeners();
-
-  try {
-    // Fake smooth progress while ML runs
-    Timer.periodic(const Duration(milliseconds: 300), (timer) {
-      if (!isUploading) {
-        timer.cancel();
-        return;
-      }
-      if (processProgress < 0.9) {
-        processProgress += 0.03;
-        notifyListeners();
-      }
-    });
-
-    final response = await VoiceMlApi.uploadWav(
-      wavPath: recordedFilePath!,
-    );
-
-    parkinsonsDetected = response['parkinsons_detected'];
-    confidence = (response['confidence'] as num).toDouble();
-
-    isUploading = false;
-    processProgress = 1.0;
-
-    _navigateToResults = true;
+    isUploading = true;
+    processProgress = 0.1;
     notifyListeners();
-  } catch (e) {
-    isUploading = false;
-    errorMessage = 'Unable to analyze voice.';
-    notifyListeners();
+
+    try {
+      // Fake smooth progress while ML runs
+      Timer.periodic(const Duration(milliseconds: 300), (timer) {
+        if (!isUploading) {
+          timer.cancel();
+          return;
+        }
+        if (processProgress < 0.9) {
+          processProgress += 0.03;
+          notifyListeners();
+        }
+      });
+
+      final response = await VoiceMlApi.uploadWav(wavPath: recordedFilePath!);
+
+      final double conf = (response['confidence'] as num).toDouble();
+
+      confidence = conf;
+
+      // Flutter-side interpretation
+      if (conf >= 0.6) {
+        parkinsonsDetected = true;
+      } else if (conf <= 0.4) {
+        parkinsonsDetected = false;
+      } else {
+        parkinsonsDetected = null; // 👈 inconclusive
+      }
+
+      isUploading = false;
+      processProgress = 1.0;
+
+      _navigateToResults = true;
+      notifyListeners();
+    } catch (e) {
+      isUploading = false;
+      errorMessage = 'Unable to analyze voice.';
+      notifyListeners();
+    }
   }
-}
 
   // ===============================
   // UI HELPERS

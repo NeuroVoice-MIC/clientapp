@@ -9,19 +9,15 @@ class ProcessingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final vm = context.watch<VoiceCheckViewModel>();
 
+    // 🔥 THIS must live here
     if (vm.shouldNavigateToResults) {
-      debugPrint(
-        '➡️ Navigating to results: '
-        'detected=${vm.parkinsonsDetected}, '
-        'confidence=${vm.confidence}',
-      );
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacementNamed(
           context,
           '/results',
           arguments: {
-            'detected': vm.parkinsonsDetected!,
-            'confidence': vm.confidence!,
+            'detected': vm.parkinsonsDetected,
+            'confidence': vm.confidence,
           },
         );
         vm.resetNavigationFlags();
@@ -42,17 +38,12 @@ class ProcessingView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: LinearProgressIndicator(
-                value: vm.processProgress,
+                value: vm.isUploading ? null : 1.0,
                 minHeight: 10,
               ),
             ),
-            const SizedBox(height: 6),
-            Text('${(vm.processProgress * 100).toInt()}%'),
-            const SizedBox(height: 40),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel Analysis'),
-            ),
+            const SizedBox(height: 12),
+            Text(vm.isUploading ? 'Analyzing voice…' : 'Finalizing'),
           ],
         ),
       ),

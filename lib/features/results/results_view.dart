@@ -6,12 +6,13 @@ class ResultsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
+    debugPrint('ResultsView arguments: $args');
 
     if (args == null || args is! Map<String, dynamic>) {
       return const _NoResultsView();
     }
 
-    final bool detected = args['detected'] as bool;
+    final bool? detected = args['detected'] as bool?;
     final double confidence = (args['confidence'] as num).toDouble();
 
     return Scaffold(
@@ -22,13 +23,13 @@ class ResultsView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              detected ? Icons.warning : Icons.check_circle,
-              color: detected ? Colors.orange : Colors.green,
+              detected == true ? Icons.warning : Icons.check_circle,
+              color: detected == true ? Colors.orange : Colors.green,
               size: 80,
             ),
             const SizedBox(height: 16),
             Text(
-              detected ? "Potential Risk Detected" : "Low Risk",
+              detected == true ? "Potential Risk Detected" : "Low Risk",
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),

@@ -16,9 +16,15 @@ class AppRouter {
       case '/voice':
         return MaterialPageRoute(builder: (_) => const VoiceCheckView());
       case '/processing':
-        return MaterialPageRoute(builder: (_) => const ProcessingView());
+        return MaterialPageRoute(
+          builder: (_) => const ProcessingView(),
+          settings: settings,
+        );
       case '/results':
-        return MaterialPageRoute(builder: (_) => const ResultsView());
+        return MaterialPageRoute(
+          builder: (_) => const ResultsView(),
+          settings: settings, // ✅ THIS LINE FIXES EVERYTHING
+        );
       case '/history':
         return MaterialPageRoute(builder: (_) => const HistoryView());
       default:
