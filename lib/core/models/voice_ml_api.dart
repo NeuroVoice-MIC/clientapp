@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 class VoiceMlApi {
-  static const String _baseUrl = 'http://127.0.0.1:3000/api';
+  static const String _baseUrl = 'https://neurovoice-node.onrender.com/api';
 
   static Future<Map<String, dynamic>> uploadWav({
     required String wavPath,
