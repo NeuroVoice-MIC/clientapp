@@ -416,7 +416,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     _notificationsEnabled = value;
                                   });
                                 },
-                                activeColor: const Color(0xFF13B6EC),
+                                activeThumbColor: const Color(0xFF13B6EC),
                               ),
                             ],
                           ),

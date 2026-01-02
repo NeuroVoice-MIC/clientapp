@@ -5,18 +5,55 @@ class ResultsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments;
+
+    if (args == null || args is! Map<String, dynamic>) {
+      return const _NoResultsView();
+    }
+
+    final bool detected = args['detected'] as bool;
+    final double confidence = (args['confidence'] as num).toDouble();
+
     return Scaffold(
       appBar: AppBar(title: const Text("Your Results")),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          children: const [
-            Icon(Icons.check_circle, color: Colors.green, size: 80),
-            SizedBox(height: 16),
-            Text("Low Risk", style: TextStyle(fontSize: 24)),
-            SizedBox(height: 8),
-            Text("Score: 94/100"),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              detected ? Icons.warning : Icons.check_circle,
+              color: detected ? Colors.orange : Colors.green,
+              size: 80,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              detected ? "Potential Risk Detected" : "Low Risk",
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "Confidence: ${(confidence * 100).toStringAsFixed(1)}%",
+              style: const TextStyle(fontSize: 16),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NoResultsView extends StatelessWidget {
+  const _NoResultsView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Results")),
+      body: const Center(
+        child: Text(
+          "No results available",
+          style: TextStyle(fontSize: 18, color: Colors.grey),
         ),
       ),
     );

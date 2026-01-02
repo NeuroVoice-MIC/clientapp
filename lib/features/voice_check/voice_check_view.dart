@@ -9,10 +9,7 @@ class VoiceCheckView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => VoiceCheckViewModel(),
-      child: const _VoiceCheckBody(),
-    );
+    return const _VoiceCheckBody();
   }
 }
 
@@ -40,11 +37,11 @@ class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
 
   void _checkAndNavigate(VoiceCheckViewModel vm) {
     if (vm.shouldNavigateToProcessing) {
-      vm.resetNavigationFlag();
+      vm.resetNavigationFlags();
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          Navigator.of(context).pushReplacementNamed('/processing');
-        }
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, '/processing');
       });
     }
   }
@@ -65,20 +62,16 @@ class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () async {
               await context.read<VoiceCheckViewModel>().stopRecording();
-
-              // ✅ IMPORTANT: pop from ROOT navigator
               Navigator.of(context, rootNavigator: true).pop();
             },
           ),
-          title: const Text(
-            'Voice Check',
-            style: AppTextStyles.title,
-          ),
+          title: const Text('Voice Check', style: AppTextStyles.title),
         ),
         body: SafeArea(
           child: Consumer<VoiceCheckViewModel>(
             builder: (_, vm, __) {
               _checkAndNavigate(vm);
+
               return Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -152,10 +145,7 @@ class _InstructionCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
-          BoxShadow(
-            blurRadius: 20,
-            color: Colors.black.withOpacity(0.05),
-          )
+          BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(0.05)),
         ],
       ),
       child: Column(
@@ -220,10 +210,7 @@ class _StatusChip extends StatelessWidget {
           SizedBox(width: 8),
           Text(
             "Nice and steady!",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Colors.green,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.green),
           ),
         ],
       ),
@@ -238,18 +225,13 @@ class _StopButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => vm.stopRecording(),
+      onPressed: vm.stopRecording,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.dangerRed,
         minimumSize: const Size.fromHeight(56),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
-      child: const Text(
-        "Stop Recording",
-        style: TextStyle(fontSize: 18),
-      ),
+      child: const Text("Stop Recording", style: TextStyle(fontSize: 18)),
     );
   }
 }
