@@ -1,3 +1,4 @@
+import 'package:clientapp/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class ResultsView extends StatelessWidget {
@@ -6,38 +7,57 @@ class ResultsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
-    debugPrint('ResultsView arguments: $args');
 
     if (args == null || args is! Map<String, dynamic>) {
       return const _NoResultsView();
     }
 
-    final bool? detected = args['detected'] as bool?;
-    final double confidence = (args['confidence'] as num).toDouble();
+    final double riskScore = (args['riskScore'] as num).toDouble();
+    final String riskLevel = args['riskLevel'] as String;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Your Results")),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              detected == true ? Icons.warning : Icons.check_circle,
-              color: detected == true ? Colors.orange : Colors.green,
-              size: 80,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              detected == true ? "Potential Risk Detected" : "Low Risk",
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "Confidence: ${(confidence * 100).toStringAsFixed(1)}%",
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
+      appBar: AppBar(title: const Text("Your Results"), leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      )),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // const _WaveBars(),
+              // const SizedBox(height: 24),
+              Icon(
+                riskLevel == "High"
+                    ? Icons.warning
+                    : riskLevel == "Medium"
+                        ? Icons.info_outline
+                        : Icons.check_circle,
+                size: 80,
+                color: riskLevel == "High"
+                    ? Colors.red
+                    : riskLevel == "Medium"
+                        ? Colors.orange
+                        : Colors.green,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Risk Level: $riskLevel",
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Risk Score: ${(riskScore * 100).toStringAsFixed(1)}%",
+                style: const TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -49,12 +69,38 @@ class _NoResultsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Results")),
-      body: const Center(
+    return const Scaffold(
+      body: Center(
         child: Text(
           "No results available",
-          style: TextStyle(fontSize: 18, color: Colors.grey),
+          style: TextStyle(color: Colors.grey),
+        ),
+      ),
+    );
+  }
+}
+
+class _WaveBars extends StatelessWidget {
+  const _WaveBars();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 120,
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          7,
+          (index) => Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            width: 10,
+            height: 60 + (index % 2) * 20,
+            decoration: BoxDecoration(
+              color: AppColors.primaryBlue.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(6),
+            ),
+          ),
         ),
       ),
     );

@@ -76,8 +76,6 @@ class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const _ProgressIndicator(),
-                    const SizedBox(height: 24),
                     const _InstructionCard(),
                     const SizedBox(height: 40),
                     const _WaveBars(),
@@ -109,31 +107,6 @@ class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
 
 /* ===================== UI WIDGETS ===================== */
 
-class _ProgressIndicator extends StatelessWidget {
-  const _ProgressIndicator();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        3,
-        (index) => Container(
-          margin: const EdgeInsets.symmetric(horizontal: 6),
-          height: 6,
-          width: index == 0 ? 32 : 8,
-          decoration: BoxDecoration(
-            color: index == 0
-                ? AppColors.primaryBlue
-                : AppColors.progressInactive,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _InstructionCard extends StatelessWidget {
   const _InstructionCard();
 
@@ -150,7 +123,7 @@ class _InstructionCard extends StatelessWidget {
       ),
       child: Column(
         children: const [
-          Text("STEP 1 OF 3", style: AppTextStyles.stepText),
+          Text("Level 1", style: AppTextStyles.stepText),
           SizedBox(height: 10),
           Text('Say "aaaa"', style: AppTextStyles.title),
           SizedBox(height: 8),
@@ -206,11 +179,11 @@ class _StatusChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: const [
-          Icon(Icons.check_circle, color: Colors.green),
+          Icon(Icons.check_circle, color: Colors.white),
           SizedBox(width: 8),
           Text(
             "Nice and steady!",
-            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.green),
+            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
           ),
         ],
       ),
@@ -231,7 +204,7 @@ class _StopButton extends StatelessWidget {
         minimumSize: const Size.fromHeight(56),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
-      child: const Text("Stop Recording", style: TextStyle(fontSize: 18)),
+      child: const Text("Stop Recording", style: TextStyle(fontSize: 18, color: AppColors.lightBlueBg)),
     );
   }
 }

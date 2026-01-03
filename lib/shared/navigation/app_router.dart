@@ -26,7 +26,7 @@ class AppRouter {
           settings: settings, // ✅ THIS LINE FIXES EVERYTHING
         );
       case '/history':
-        return MaterialPageRoute(builder: (_) => const HistoryView());
+        return MaterialPageRoute(builder: (_) => HistoryView());
       default:
         return MaterialPageRoute(builder: (_) => const OnboardingView());
     }

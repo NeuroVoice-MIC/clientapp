@@ -16,7 +16,7 @@ class _MainShellViewState extends State<MainShellView> {
 
   final List<Widget> _pages = [
     HomeView(),
-    const HistoryView(),
+    HistoryView(),
     const ProfileView(),
   ];
 

@@ -1,13 +1,11 @@
-class VoiceTestHistory {
-  final String id;
+class VoiceResult {
+  final double riskScore;
+  final String riskLevel;
   final DateTime timestamp;
-  final String status;
-  final int score;
 
-  VoiceTestHistory({
-    required this.id,
+  VoiceResult({
+    required this.riskScore,
+    required this.riskLevel,
     required this.timestamp,
-    required this.status,
-    required this.score,
   });
 }

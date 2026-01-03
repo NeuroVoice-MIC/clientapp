@@ -2,10 +2,27 @@ import 'dart:async';
 import 'package:clientapp/core/models/voice_ml_api.dart';
 import 'package:flutter/material.dart';
 import 'package:clientapp/core/utils/audio_helper.dart';
+import 'package:hive/hive.dart';
+
+/// ===============================
+/// Test Type Registry (Extensible)
+/// ===============================
+class TestTypes {
+  static const String voice = 'voice';
+  static const String face = 'face';
+  static const String tremors = 'tremors';
+}
+
+/// ===============================
+/// Hive Constants
+/// ===============================
+const String kResultsBox = 'voice_results';
 
 class VoiceCheckViewModel extends ChangeNotifier {
   final AudioRecorderService _audioService = AudioRecorderService();
-  Timer? _timer;
+
+  Timer? _recordingTimer;
+  Timer? _progressTimer;
 
   int remainingSeconds = 12;
   String? recordedFilePath;
@@ -18,8 +35,8 @@ class VoiceCheckViewModel extends ChangeNotifier {
 
   /// ML state
   bool isUploading = false;
-  bool? parkinsonsDetected;
-  double? confidence;
+  double? confidence; // risk_score
+  String? riskLevel;  // risk_level
   String? errorMessage;
 
   // ===============================
@@ -49,7 +66,8 @@ class VoiceCheckViewModel extends ChangeNotifier {
     recordedFilePath = await _audioService.startRecording();
     _isRecording = true;
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    _recordingTimer?.cancel();
+    _recordingTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (remainingSeconds <= 0) {
         await stopRecording();
       } else {
@@ -62,19 +80,17 @@ class VoiceCheckViewModel extends ChangeNotifier {
   Future<void> stopRecording() async {
     if (!_isRecording) return;
 
-    _timer?.cancel();
-    _timer = null;
+    _recordingTimer?.cancel();
+    _recordingTimer = null;
 
     recordedFilePath = await _audioService.stopRecording();
     _isRecording = false;
 
     if (_disposed || recordedFilePath == null) return;
 
-    // ✅ Navigate to Processing immediately
     _navigateToProcessing = true;
     notifyListeners();
 
-    // Start ML in background
     _uploadAndAnalyze();
   }
 
@@ -88,32 +104,40 @@ class VoiceCheckViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Fake smooth progress while ML runs
-      Timer.periodic(const Duration(milliseconds: 300), (timer) {
-        if (!isUploading) {
-          timer.cancel();
-          return;
-        }
-        if (processProgress < 0.9) {
-          processProgress += 0.03;
-          notifyListeners();
-        }
+      // Smooth progress animation
+      _progressTimer?.cancel();
+      _progressTimer = Timer.periodic(
+        const Duration(milliseconds: 300),
+        (timer) {
+          if (!isUploading || _disposed) {
+            timer.cancel();
+            return;
+          }
+          if (processProgress < 0.9) {
+            processProgress += 0.03;
+            notifyListeners();
+          }
+        },
+      );
+
+      final response =
+          await VoiceMlApi.uploadWav(wavPath: recordedFilePath!);
+
+      debugPrint('🧠 Raw ML response: $response');
+
+      confidence = (response['risk_score'] as num).toDouble();
+      riskLevel = response['risk_level'] as String;
+
+      // ===============================
+      // SAVE RESULT TO HISTORY
+      // ===============================
+      final box = Hive.box(kResultsBox);
+      box.add({
+        'riskScore': confidence,
+        'riskLevel': riskLevel,
+        'timestamp': DateTime.now().toIso8601String(),
+        'testType': TestTypes.voice,
       });
-
-      final response = await VoiceMlApi.uploadWav(wavPath: recordedFilePath!);
-
-      final double conf = (response['confidence'] as num).toDouble();
-
-      confidence = conf;
-
-      // Flutter-side interpretation
-      if (conf >= 0.6) {
-        parkinsonsDetected = true;
-      } else if (conf <= 0.4) {
-        parkinsonsDetected = false;
-      } else {
-        parkinsonsDetected = null; // 👈 inconclusive
-      }
 
       isUploading = false;
       processProgress = 1.0;
@@ -121,6 +145,7 @@ class VoiceCheckViewModel extends ChangeNotifier {
       _navigateToResults = true;
       notifyListeners();
     } catch (e) {
+      debugPrint('❌ Voice analysis failed: $e');
       isUploading = false;
       errorMessage = 'Unable to analyze voice.';
       notifyListeners();
@@ -131,9 +156,8 @@ class VoiceCheckViewModel extends ChangeNotifier {
   // UI HELPERS
   // ===============================
 
-  String get formattedTime {
-    return '00:${remainingSeconds.toString().padLeft(2, '0')}';
-  }
+  String get formattedTime =>
+      '00:${remainingSeconds.toString().padLeft(2, '0')}';
 
   // ===============================
   // CLEANUP
@@ -142,7 +166,8 @@ class VoiceCheckViewModel extends ChangeNotifier {
   @override
   void dispose() {
     _disposed = true;
-    _timer?.cancel();
+    _recordingTimer?.cancel();
+    _progressTimer?.cancel();
     _audioService.dispose();
     super.dispose();
   }
