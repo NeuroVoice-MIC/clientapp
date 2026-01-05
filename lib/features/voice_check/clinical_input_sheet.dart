@@ -1,3 +1,4 @@
+import 'package:clientapp/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class ClinicalInputSheet extends StatefulWidget {
@@ -11,6 +12,7 @@ class _ClinicalInputSheetState extends State<ClinicalInputSheet> {
   bool ageAbove60 = false;
   bool neuroHistory = false;
   bool hypertension = false;
+  bool updrs = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,11 @@ class _ClinicalInputSheetState extends State<ClinicalInputSheet> {
             hypertension,
             (v) => setState(() => hypertension = v),
           ),
+          _switchTile(
+            "UPDRS — Unified Parkinson’s Disease Rating Scale",
+            updrs,
+            (v) => setState(() => updrs = v),
+          ),
 
           const SizedBox(height: 24),
 
@@ -54,24 +61,22 @@ class _ClinicalInputSheetState extends State<ClinicalInputSheet> {
                 'ac': ageAbove60 ? 1 : 0,
                 'nth': neuroHistory ? 1 : 0,
                 'htn': hypertension ? 1 : 0,
+                'updrs': updrs ? 1 : 0,
               });
             },
-            child: const Text('Continue'),
+            child: const Text('Continue', style: TextStyle(color: AppColors.accentBlue),),
           ),
         ],
       ),
     );
   }
 
-  Widget _switchTile(
-    String label,
-    bool value,
-    ValueChanged<bool> onChanged,
-  ) {
+  Widget _switchTile(String label, bool value, ValueChanged<bool> onChanged) {
     return SwitchListTile(
       title: Text(label),
       value: value,
       onChanged: onChanged,
+      activeThumbColor: AppColors.accentBlue,
     );
   }
 }
