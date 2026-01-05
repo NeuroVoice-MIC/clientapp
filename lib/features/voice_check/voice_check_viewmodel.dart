@@ -33,11 +33,21 @@ class VoiceCheckViewModel extends ChangeNotifier {
   bool _navigateToResults = false;
   bool _disposed = false;
 
-  /// ML state
+  /// ===============================
+  /// ML OUTPUT
+  /// ===============================
   bool isUploading = false;
   double? confidence; // risk_score
   String? riskLevel;  // risk_level
   String? errorMessage;
+
+  /// ===============================
+  /// CLINICAL INPUTS (NEW)
+  /// ===============================
+  int? ac;   // age category (binary)
+  int? nth;  // neurological test history
+  int? htn;  // hypertension
+  final int updrs = 0; // fixed for current model
 
   // ===============================
   // GETTERS
@@ -53,11 +63,32 @@ class VoiceCheckViewModel extends ChangeNotifier {
   }
 
   // ===============================
+  // CLINICAL INPUT SETTER
+  // ===============================
+
+  void setClinicalInputs({
+    required int ac,
+    required int nth,
+    required int htn,
+  }) {
+    this.ac = ac;
+    this.nth = nth;
+    this.htn = htn;
+  }
+
+  // ===============================
   // RECORDING
   // ===============================
 
   Future<void> startRecording() async {
     if (_isRecording) return;
+
+    // 🔒 Ensure clinical form was filled
+    if (ac == null || nth == null || htn == null) {
+      errorMessage = 'Clinical information missing.';
+      notifyListeners();
+      return;
+    }
 
     remainingSeconds = 12;
     errorMessage = null;
@@ -67,14 +98,17 @@ class VoiceCheckViewModel extends ChangeNotifier {
     _isRecording = true;
 
     _recordingTimer?.cancel();
-    _recordingTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (remainingSeconds <= 0) {
-        await stopRecording();
-      } else {
-        remainingSeconds--;
-        notifyListeners();
-      }
-    });
+    _recordingTimer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) async {
+        if (remainingSeconds <= 0) {
+          await stopRecording();
+        } else {
+          remainingSeconds--;
+          notifyListeners();
+        }
+      },
+    );
   }
 
   Future<void> stopRecording() async {
@@ -120,8 +154,13 @@ class VoiceCheckViewModel extends ChangeNotifier {
         },
       );
 
-      final response =
-          await VoiceMlApi.uploadWav(wavPath: recordedFilePath!);
+      final response = await VoiceMlApi.uploadWav(
+        wavPath: recordedFilePath!,
+        ac: ac!,
+        nth: nth!,
+        htn: htn!,
+        updrs: updrs,
+      );
 
       debugPrint('🧠 Raw ML response: $response');
 
@@ -137,6 +176,10 @@ class VoiceCheckViewModel extends ChangeNotifier {
         'riskLevel': riskLevel,
         'timestamp': DateTime.now().toIso8601String(),
         'testType': TestTypes.voice,
+        'ac': ac,
+        'nth': nth,
+        'htn': htn,
+        'updrs': updrs,
       });
 
       isUploading = false;
@@ -147,6 +190,7 @@ class VoiceCheckViewModel extends ChangeNotifier {
     } catch (e) {
       debugPrint('❌ Voice analysis failed: $e');
       isUploading = false;
+      processProgress = 0.0;
       errorMessage = 'Unable to analyze voice.';
       notifyListeners();
     }

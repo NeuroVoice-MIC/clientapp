@@ -3,6 +3,7 @@ import 'package:clientapp/core/constants/text_styles.dart';
 import 'package:clientapp/features/voice_check/voice_check_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'clinical_input_sheet.dart'; // 👈 make sure this exists
 
 class VoiceCheckView extends StatelessWidget {
   const VoiceCheckView({super.key});
@@ -21,16 +22,37 @@ class _VoiceCheckBody extends StatefulWidget {
 }
 
 class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
-  bool _started = false;
+  bool _formShown = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (!_started) {
-      _started = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<VoiceCheckViewModel>().startRecording();
+    if (!_formShown) {
+      _formShown = true;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final result = await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          isDismissible: false,
+          enableDrag: false,
+          builder: (_) => const ClinicalInputSheet(),
+        );
+
+        if (!mounted || result == null) return;
+
+        final vm = context.read<VoiceCheckViewModel>();
+
+        // ✅ Store clinical inputs
+        vm.setClinicalInputs(
+          ac: result['ac'],
+          nth: result['nth'],
+          htn: result['htn'],
+        );
+
+        // ✅ Start recording ONLY after inputs
+        vm.startRecording();
       });
     }
   }
@@ -202,9 +224,14 @@ class _StopButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.dangerRed,
         minimumSize: const Size.fromHeight(56),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
       ),
-      child: const Text("Stop Recording", style: TextStyle(fontSize: 18, color: AppColors.lightBlueBg)),
+      child: const Text(
+        "Stop Recording",
+        style: TextStyle(fontSize: 18, color: AppColors.lightBlueBg),
+      ),
     );
   }
 }
