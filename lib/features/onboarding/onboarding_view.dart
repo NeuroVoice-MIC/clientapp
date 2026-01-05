@@ -135,7 +135,7 @@ class OnboardingView extends StatelessWidget {
                     ),
                   ),
                   onPressed: () => vm.getStarted(context),
-                  child: const Text("Get Started"),
+                  child: const Text("Get Started", style: TextStyle(color: Colors.white)),
                 ),
               ),
 
