@@ -1,4 +1,5 @@
 import 'package:clientapp/core/constants/colors.dart';
+import 'package:clientapp/core/constants/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -64,11 +65,11 @@ class HistoryView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("History"),
+        title: const Text("History", style: AppTextStyles.title),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete_outline),
+            icon: const Icon(Icons.delete_outline, size: 26,),
             tooltip: "Clear history",
             onPressed: () => _clearHistory(context),
           ),
