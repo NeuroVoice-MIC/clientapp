@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 
 class DailyTipCard extends StatelessWidget {
-  const DailyTipCard({super.key});
+  final String tip;
+  const DailyTipCard({super.key, required this.tip});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.all(16),
-        child: Text(
-          "Reading aloud for just 5 minutes a day can help strengthen your vocal cords and improve clarity.",
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Daily Tip",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Text(tip),
+          ],
         ),
       ),
     );

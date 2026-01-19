@@ -1,5 +1,5 @@
+import 'package:clientapp/core/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HistoryView extends StatelessWidget {
@@ -39,11 +39,11 @@ class HistoryView extends StatelessWidget {
   Color _riskColor(String level) {
     switch (level) {
       case "High":
-        return Colors.red;
+        return AppColors.red;
       case "Medium":
-        return Colors.orange;
+        return AppColors.orange;
       default:
-        return Colors.green;
+        return AppColors.green;
     }
   }
 
@@ -81,7 +81,7 @@ class HistoryView extends StatelessWidget {
             return const Center(
               child: Text(
                 "No history yet",
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: AppColors.gray),
               ),
             );
           }

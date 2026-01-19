@@ -1,16 +1,18 @@
 import 'package:clientapp/core/constants/colors.dart';
+import 'package:clientapp/core/constants/strings.dart';
 import 'package:clientapp/features/voice_check/voice_check_viewmodel.dart';
+import 'package:clientapp/shared/widgets/did_you_know_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProcessingView extends StatefulWidget {
-  const ProcessingView({super.key});
+class VoiceProcessingView extends StatefulWidget {
+  const VoiceProcessingView({super.key});
 
   @override
-  State<ProcessingView> createState() => _ProcessingViewState();
+  State<VoiceProcessingView> createState() => _VoiceProcessingViewState();
 }
 
-class _ProcessingViewState extends State<ProcessingView> {
+class _VoiceProcessingViewState extends State<VoiceProcessingView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -58,7 +60,7 @@ class _ProcessingViewState extends State<ProcessingView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Text(
-                        'Processing',
+                        'Voice Processing',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -126,7 +128,7 @@ class _ProcessingViewState extends State<ProcessingView> {
                                   ),
                                   child: const Icon(
                                     Icons.graphic_eq,
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     size: 36,
                                   ),
                                 ),
@@ -186,17 +188,17 @@ class _ProcessingViewState extends State<ProcessingView> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
-                                      'Processing',
+                                      'Voice Processing',
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: Colors.grey,
+                                        color: AppColors.gray,
                                       ),
                                     ),
                                     Text(
                                       '${(progress * 100).toStringAsFixed(0)}%',
                                       style: const TextStyle(
                                         fontSize: 12,
-                                        color: Colors.grey,
+                                        color: AppColors.gray,
                                       ),
                                     ),
                                   ],
@@ -215,7 +217,7 @@ class _ProcessingViewState extends State<ProcessingView> {
                                 Container(
                                   padding: const EdgeInsets.all(16),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
                                       color: const Color(0xFFEAF0F3),
@@ -241,29 +243,8 @@ class _ProcessingViewState extends State<ProcessingView> {
                                         ),
                                       ),
                                       const SizedBox(width: 12),
-                                      const Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Did you know?',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 4),
-                                            Text(
-                                              'Regular voice exercises can help maintain vocal strength over time.',
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey,
-                                                height: 1.4,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                      DidYouKnowCard(
+                                        fact: AppStrings.dailyFactVoice,
                                       ),
                                     ],
                                   ),
@@ -279,7 +260,7 @@ class _ProcessingViewState extends State<ProcessingView> {
                                     'Cancel Analysis',
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: Colors.grey,
+                                      color: AppColors.gray,
                                     ),
                                   ),
                                 ),
@@ -292,14 +273,14 @@ class _ProcessingViewState extends State<ProcessingView> {
                                     Icon(
                                       Icons.lock_outline,
                                       size: 14,
-                                      color: Colors.grey,
+                                      color: AppColors.gray,
                                     ),
                                     SizedBox(width: 6),
                                     Text(
                                       'Your data is processed privately.',
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: Colors.grey,
+                                        color: AppColors.gray,
                                       ),
                                     ),
                                   ],
@@ -328,7 +309,7 @@ class _ProcessingViewState extends State<ProcessingView> {
       width: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: const Color(0xFF13B6EC).withOpacity(opacity),
+        color: AppColors.primaryRipple.withOpacity(opacity),
       ),
     );
   }

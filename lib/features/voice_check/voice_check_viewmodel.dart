@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:clientapp/core/models/voice_ml_api.dart';
+import 'package:clientapp/core/network/voice_ml_api.dart';
 import 'package:flutter/material.dart';
 import 'package:clientapp/core/utils/audio_helper.dart';
 import 'package:hive/hive.dart';

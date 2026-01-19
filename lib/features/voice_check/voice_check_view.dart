@@ -79,9 +79,9 @@ class _VoiceCheckBodyState extends State<_VoiceCheckBody> {
         backgroundColor: AppColors.background,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: AppColors.black),
             onPressed: () async {
               await context.read<VoiceCheckViewModel>().stopRecording();
               Navigator.of(context, rootNavigator: true).pop();
@@ -137,10 +137,10 @@ class _InstructionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
-          BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(0.05)),
+          BoxShadow(blurRadius: 20, color: AppColors.lightBlack),
         ],
       ),
       child: Column(

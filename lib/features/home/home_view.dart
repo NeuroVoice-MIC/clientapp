@@ -1,11 +1,12 @@
+import 'package:clientapp/core/constants/strings.dart';
 import 'package:clientapp/core/constants/text_styles.dart';
 import 'package:clientapp/shared/widgets/daily_tip_card.dart';
-import 'package:clientapp/shared/widgets/latest_checkup_card.dart';
+import 'package:clientapp/shared/widgets/face_test_card.dart';
 import 'package:clientapp/shared/widgets/streak_card.dart';
+import 'package:clientapp/shared/widgets/tremor_test_card.dart';
 import 'package:clientapp/shared/widgets/voice_test_card.dart';
 import 'package:flutter/material.dart';
 import 'home_viewmodel.dart';
-
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});
@@ -29,18 +30,22 @@ class HomeView extends StatelessWidget {
           StreakCard(viewModel: viewModel),
           const SizedBox(height: 20),
 
-          VoiceTestCard(
-            onTap: () => viewModel.startVoiceTest(context),
-          ),
+          VoiceTestCard(onTap: () => viewModel.startVoiceTest(context)),
           const SizedBox(height: 20),
 
-          const Text("Overview", style: AppTextStyles.cardTitle),
-          const SizedBox(height: 12),
+          FaceTestCard(onTap: () => viewModel.startFaceTest(context)),
+          const SizedBox(height: 20),
 
-          LatestCheckupCard(onTap: viewModel.openDetails),
-          const SizedBox(height: 16),
+          TremorTestCard(onTap: () => viewModel.startTremorTest(context)),
+          const SizedBox(height: 20),
 
-          const DailyTipCard(),
+          // const Text("Overview", style: AppTextStyles.cardTitle),
+          // const SizedBox(height: 12),
+
+          // LatestCheckupCard(onTap: () => viewModel.openDetails(context)),
+          // const SizedBox(height: 16),
+
+          DailyTipCard(tip: AppStrings.dailyTip),
         ],
       ),
     );

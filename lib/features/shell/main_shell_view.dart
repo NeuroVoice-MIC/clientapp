@@ -27,7 +27,7 @@ class _MainShellViewState extends State<MainShellView> {
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        selectedItemColor: AppColors.primary,
+        selectedItemColor: AppColors.primaryBlue,
         onTap: (index) {
           setState(() {
             _currentIndex = index;

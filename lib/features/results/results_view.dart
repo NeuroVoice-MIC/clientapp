@@ -38,10 +38,10 @@ class ResultsView extends StatelessWidget {
                         : Icons.check_circle,
                 size: 80,
                 color: riskLevel == "High"
-                    ? Colors.red
+                    ? AppColors.red
                     : riskLevel == "Medium"
-                        ? Colors.orange
-                        : Colors.green,
+                        ? AppColors.orange
+                        : AppColors.green,
               ),
               const SizedBox(height: 16),
               Text(
@@ -73,36 +73,37 @@ class _NoResultsView extends StatelessWidget {
       body: Center(
         child: Text(
           "No results available",
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: AppColors.gray),
         ),
       ),
     );
   }
 }
 
-class _WaveBars extends StatelessWidget {
-  const _WaveBars();
+// TODO: Implement animated wave bars
+// class _WaveBars extends StatelessWidget {
+//   const _WaveBars();
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          7,
-          (index) => Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            width: 10,
-            height: 60 + (index % 2) * 20,
-            decoration: BoxDecoration(
-              color: AppColors.primaryBlue.withOpacity(0.7),
-              borderRadius: BorderRadius.circular(6),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: 120,
+//       alignment: Alignment.center,
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: List.generate(
+//           7,
+//           (index) => Container(
+//             margin: const EdgeInsets.symmetric(horizontal: 4),
+//             width: 10,
+//             height: 60 + (index % 2) * 20,
+//             decoration: BoxDecoration(
+//               color: AppColors.primaryBlue.withOpacity(0.7),
+//               borderRadius: BorderRadius.circular(6),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

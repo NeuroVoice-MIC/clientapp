@@ -1,9 +1,9 @@
 import 'package:clientapp/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 
-class VoiceTestCard extends StatelessWidget {
+class TremorTestCard extends StatelessWidget {
   final VoidCallback onTap;
-  const VoiceTestCard({super.key, required this.onTap});
+  const TremorTestCard({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +13,17 @@ class VoiceTestCard extends StatelessWidget {
       child: Container(
         height: 140,
         decoration: BoxDecoration(
-          color: AppColors.primaryVoice,
+          color: AppColors.primaryTremor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Icons.mic, color: AppColors.white, size: 40),
+            Icon(Icons.vibration_sharp, color: AppColors.white, size: 40),
             SizedBox(height: 10),
-            Text("Start Voice Test",
+            Text("Start Tremor Test",
                 style: TextStyle(color: AppColors.white, fontSize: 20)),
-            Text("Takes less than 30 seconds",
+            Text("Takes less than 1 minute",
                 style: TextStyle(color: AppColors.whiteText)),
           ],
         ),

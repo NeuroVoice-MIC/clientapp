@@ -1,3 +1,4 @@
+import 'package:clientapp/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,7 +29,7 @@ class _ProfileViewState extends State<ProfileView> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(24),
                     bottomRight: Radius.circular(24),
@@ -44,7 +45,7 @@ class _ProfileViewState extends State<ProfileView> {
                           height: 120,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.grey[300],
+                            color: AppColors.lightGray,
                             border: Border.all(
                               color: const Color(0xFF13B6EC),
                               width: 3,
@@ -54,7 +55,7 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Icon(
                               Icons.person,
                               size: 60,
-                              color: Colors.grey[600],
+                              color: AppColors.gray,
                             ),
                           ),
                         ),
@@ -73,7 +74,7 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                               child: const Icon(
                                 Icons.camera_alt,
-                                color: Colors.white,
+                                color: AppColors.white,
                                 size: 20,
                               ),
                             ),
@@ -147,11 +148,11 @@ class _ProfileViewState extends State<ProfileView> {
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
+                            color: AppColors.lightBlack,
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -196,7 +197,7 @@ class _ProfileViewState extends State<ProfileView> {
                                   children: [
                                     const Icon(
                                       Icons.check_circle,
-                                      color: Colors.green,
+                                      color: AppColors.green,
                                       size: 16,
                                     ),
                                     const SizedBox(width: 6),
@@ -204,7 +205,7 @@ class _ProfileViewState extends State<ProfileView> {
                                       'On Track',
                                       style: TextStyle(
                                         fontSize: 13 * _fontScale,
-                                        color: Colors.green,
+                                        color: AppColors.green,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -240,11 +241,11 @@ class _ProfileViewState extends State<ProfileView> {
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
+                            color: AppColors.lightBlack,
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -296,11 +297,11 @@ class _ProfileViewState extends State<ProfileView> {
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
+                            color: AppColors.lightBlack,
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -447,11 +448,11 @@ class _ProfileViewState extends State<ProfileView> {
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
+                            color: AppColors.lightBlack,
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -464,13 +465,13 @@ class _ProfileViewState extends State<ProfileView> {
                             height: 50,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.grey[300],
+                              color: AppColors.lightGray,
                             ),
                             child: ClipOval(
                               child: Icon(
                                 Icons.person,
                                 size: 30,
-                                color: Colors.grey[600],
+                                color: AppColors.gray,
                               ),
                             ),
                           ),

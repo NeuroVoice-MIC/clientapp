@@ -9,5 +9,15 @@ class HomeViewModel {
     Navigator.of(context, rootNavigator: true).pushNamed('/voice');
   }
 
-  void openDetails() {}
+  void startFaceTest(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).pushNamed('/face');
+  }
+
+  void startTremorTest(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).pushNamed('/tremor');
+  }
+
+  void openDetails(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).pushNamed('/history');
+  }
 }
